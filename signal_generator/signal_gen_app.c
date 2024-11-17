@@ -2,7 +2,7 @@
 
 #include <furi.h>
 #include <furi_hal.h>
-#include "views/signal_gen_pwm_cpp.hpp"
+#include "views/signal_gen_pwm_cpp.h"
 
 static bool signal_gen_app_custom_event_callback(void* context, uint32_t event) {
     furi_assert(context);
@@ -62,7 +62,7 @@ SignalGenApp* signal_gen_app_alloc() {
     view_dispatcher_add_view(
         app->view_dispatcher, SignalGenViewPwm, signal_gen_pwm_cpp_get_view(app->pwm_view));
 
-    scene_manager_next_scene(app->scene_manager, SignalGenSceneStart);
+    scene_manager_next_scene(app->scene_manager, SignalGenViewPwm);
 
     return app;
 }
@@ -77,7 +77,7 @@ void signal_gen_app_free(SignalGenApp* app) {
 
     submenu_free(app->submenu);
     variable_item_list_free(app->var_item_list);
-    
+
     // Original C version PWM cleanup (commented out)
     /*
     signal_gen_pwm_free(app->pwm_view);

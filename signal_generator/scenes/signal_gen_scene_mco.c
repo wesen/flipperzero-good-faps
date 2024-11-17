@@ -86,7 +86,7 @@ void signal_gen_scene_mco_on_enter(void* context) {
 
     VariableItem* item;
 
-    item = variable_item_list_add(var_item_list, "GPIO Pin", COUNT_OF(mco_pin_names), NULL, NULL);
+    item = variable_item_list_add(var_item_list, "GPIO Pin YOLO", COUNT_OF(mco_pin_names), NULL, NULL);
     variable_item_set_current_value_index(item, 0);
     variable_item_set_current_value_text(item, mco_pin_names[0]);
 

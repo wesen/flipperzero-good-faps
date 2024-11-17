@@ -25,7 +25,8 @@ struct SignalGenApp {
 
     VariableItemList* var_item_list;
     Submenu* submenu;
-    SignalGenPwm* pwm_view;
+    // SignalGenPwm* pwm_view;
+    SignalGenPwmCpp* pwm_view;
 
     FuriHalClockMcoSourceId mco_src;
     FuriHalClockMcoDivisorId mco_div;
