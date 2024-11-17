@@ -8,27 +8,22 @@ static const char *const PWM_CH_NAMES[] = {"2(A7)", "4(A4)"};
 static constexpr uint32_t FREQ_MAX = 1000000UL;
 static constexpr uint8_t DUTY_MAX = 100;
 
-extern "C" {
-static void c_draw_callback(Canvas *canvas, void *context) {
-  auto pwm = static_cast<PwmView *>(context);
-  if (pwm) {
-    canvas_draw_str(canvas, 10, 10, "PWM HAS CONTEXT");
-  } else {
-    canvas_draw_str(canvas, 10, 10, "PWM NO CONTEXT");
-  }
-}
-}
+struct PwmViewModel {
+  PwmView *pwm;
+};
 
 PwmView::PwmView() : callback(nullptr), callback_context(nullptr) {
   view = view_alloc();
   view_set_context(view, this);
-  //   view_set_draw_callback(view, draw_callback);
-  view_set_draw_callback(view, c_draw_callback);
-  view_set_input_callback(view, input_callback);
-  view_set_context(view, this);
+  view_allocate_model(view, ViewModelTypeLocking, sizeof(PwmViewModel));
+  with_view_model_cpp(
+      view, PwmViewModel *, model, { model->pwm = this; }, true);
 
-  //   menu.reset(new Menu());
-  //   setup_menu();
+  view_set_draw_callback(view, draw_callback);
+  view_set_input_callback(view, input_callback);
+
+  menu.reset(new Menu());
+  setup_menu();
 }
 
 PwmView::~PwmView() { view_free(view); }
@@ -68,8 +63,8 @@ void PwmView::setup_menu() {
 
   // Add items to menu
   menu->add_item(std::move(channel_item));
-  //   menu->add_item(std::move(freq_item));
-  //   menu->add_item(std::move(duty_item));
+  menu->add_item(std::move(freq_item));
+  menu->add_item(std::move(duty_item));
 }
 
 void PwmView::set_callback(SignalGenPwmViewCallback cb, void *context) {
@@ -82,20 +77,15 @@ void PwmView::set_params(uint8_t channel_id, uint32_t freq, uint8_t duty) {
   UNUSED(freq);
   UNUSED(duty);
   channel_item->set_selected_index(channel_id);
-  // freq_item->set_value(freq);
-  // duty_item->set_value(duty);
+  freq_item->set_value(freq);
+  duty_item->set_value(duty);
 }
 
-void PwmView::draw_callback(Canvas *canvas, void *context) {
-  auto pwm = static_cast<PwmView *>(context);
-  // pwm->menu->draw(canvas);
-  if (!pwm) {
-    canvas_draw_str(canvas, 10, 10, "PWM NO CONTEXT");
-  } else if (pwm->menu) {
-    canvas_draw_str(canvas, 10, 10, "PWM HAS MENU");
-  } else {
-    canvas_draw_str(canvas, 10, 10, "PWM NO MENU");
-  }
+void PwmView::draw_callback(Canvas *canvas, void *_model) {
+  auto pwmModel = static_cast<PwmViewModel *>(_model);
+  furi_assert(pwmModel);
+  furi_assert(pwmModel->pwm);
+  pwmModel->pwm->menu->draw(canvas);
 }
 
 bool PwmView::input_callback(InputEvent *event, void *context) {
@@ -135,6 +125,8 @@ void signal_gen_pwm_cpp_set_callback(SignalGenPwmCpp *pwm,
 
 void signal_gen_pwm_cpp_set_params(SignalGenPwmCpp *pwm, uint8_t channel_id,
                                    uint32_t freq, uint8_t duty) {
+  furi_assert(pwm);
+  furi_assert(pwm->impl);
   pwm->impl->set_params(channel_id, freq, duty);
   UNUSED(pwm);
   UNUSED(channel_id);
