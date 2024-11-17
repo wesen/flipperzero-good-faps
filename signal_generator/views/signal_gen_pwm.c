@@ -18,6 +18,8 @@ struct SignalGenPwm {
     void* context;
 };
 
+typedef struct SignalGenPwm SignalGenPwm;
+
 typedef struct {
     LineIndex line_sel;
     bool edit_mode;
@@ -35,8 +37,8 @@ typedef struct {
 #define VALUE_X 100
 #define VALUE_W 45
 
-#define FREQ_VALUE_X 62
-#define FREQ_MAX 1000000UL
+#define FREQ_VALUE_X   62
+#define FREQ_MAX       1000000UL
 #define FREQ_DIGITS_NB 7
 
 static void pwm_set_config(SignalGenPwm* pwm) {

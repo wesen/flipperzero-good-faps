@@ -11,7 +11,10 @@
 #include <gui/modules/submenu.h>
 #include <gui/modules/variable_item_list.h>
 #include <gui/modules/submenu.h>
-#include "views/signal_gen_pwm.h"
+// Original C PWM view header (commented out)
+// #include "views/signal_gen_pwm.h"
+// New C++ PWM view header (C-compatible version)
+#include "views/signal_gen_pwm_cpp.h"
 
 typedef struct SignalGenApp SignalGenApp;
 
