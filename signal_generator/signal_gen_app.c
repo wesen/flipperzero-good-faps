@@ -22,6 +22,14 @@ static void signal_gen_app_tick_event_callback(void* context) {
     scene_manager_handle_tick_event(app->scene_manager);
 }
 
+static void c_draw_callback(Canvas* canvas, void* context) {
+    if(context != NULL) {
+        canvas_draw_str(canvas, 10, 10, "C HAS CONTEXT");
+    } else {
+        canvas_draw_str(canvas, 10, 10, "C NO CONTEXT");
+    }
+}
+
 SignalGenApp* signal_gen_app_alloc() {
     SignalGenApp* app = malloc(sizeof(SignalGenApp));
 
@@ -57,12 +65,18 @@ SignalGenApp* signal_gen_app_alloc() {
         app->view_dispatcher, SignalGenViewPwm, signal_gen_pwm_get_view(app->pwm_view));
     */
 
-    // New C++ version PWM view
-    app->pwm_view = signal_gen_pwm_cpp_alloc();
-    view_dispatcher_add_view(
-        app->view_dispatcher, SignalGenViewPwm, signal_gen_pwm_cpp_get_view(app->pwm_view));
+    View* view = view_alloc();
+    //   view_set_draw_callback(view, draw_callback);
+    view_set_draw_callback(view, c_draw_callback);
+    view_set_context(view, app);
+    view_dispatcher_add_view(app->view_dispatcher, SignalGenViewPwm, view);
 
-    scene_manager_next_scene(app->scene_manager, SignalGenViewPwm);
+    // New C++ version PWM view
+    // app->pwm_view = signal_gen_pwm_cpp_alloc();
+    // view_dispatcher_add_view(
+    //     app->view_dispatcher, SignalGenViewPwm, signal_gen_pwm_cpp_get_view(app->pwm_view));
+
+    scene_manager_next_scene(app->scene_manager, SignalGenScenePwm);
 
     return app;
 }

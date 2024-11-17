@@ -8,14 +8,27 @@ static const char *const PWM_CH_NAMES[] = {"2(A7)", "4(A4)"};
 static constexpr uint32_t FREQ_MAX = 1000000UL;
 static constexpr uint8_t DUTY_MAX = 100;
 
+extern "C" {
+static void c_draw_callback(Canvas *canvas, void *context) {
+  auto pwm = static_cast<PwmView *>(context);
+  if (pwm) {
+    canvas_draw_str(canvas, 10, 10, "PWM HAS CONTEXT");
+  } else {
+    canvas_draw_str(canvas, 10, 10, "PWM NO CONTEXT");
+  }
+}
+}
+
 PwmView::PwmView() : callback(nullptr), callback_context(nullptr) {
   view = view_alloc();
   view_set_context(view, this);
-  view_set_draw_callback(view, draw_callback);
+  //   view_set_draw_callback(view, draw_callback);
+  view_set_draw_callback(view, c_draw_callback);
   view_set_input_callback(view, input_callback);
+  view_set_context(view, this);
 
-  menu.reset(new Menu());
-  setup_menu();
+  //   menu.reset(new Menu());
+  //   setup_menu();
 }
 
 PwmView::~PwmView() { view_free(view); }

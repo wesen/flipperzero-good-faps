@@ -39,7 +39,7 @@ bool signal_gen_scene_start_on_event(void* context, SceneManagerEvent event) {
             scene_manager_next_scene(app->scene_manager, SignalGenScenePwm);
             consumed = true;
         } else if(event.event == SubmenuIndexClockOutput) {
-            scene_manager_next_scene(app->scene_manager, SignalGenSceneMco);
+            // scene_manager_next_scene(app->scene_manager, SignalGenSceneMco);
             consumed = true;
         }
         scene_manager_set_scene_state(app->scene_manager, SignalGenSceneStart, event.event);

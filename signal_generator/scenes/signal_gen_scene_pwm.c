@@ -8,31 +8,31 @@
 #define DEFAULT_FREQ 1000
 #define DEFAULT_DUTY 50
 
-static void
-    signal_gen_pwm_callback(uint8_t channel_id, uint32_t freq, uint8_t duty, void* context) {
-    SignalGenApp* app = context;
-    UNUSED(app);
-    UNUSED(channel_id);
-    UNUSED(freq);
-    UNUSED(duty);
+// static void
+//     signal_gen_pwm_callback(uint8_t channel_id, uint32_t freq, uint8_t duty, void* context) {
+//     SignalGenApp* app = context;
+//     UNUSED(app);
+//     UNUSED(channel_id);
+//     UNUSED(freq);
+//     UNUSED(duty);
 
-    //     app->pwm_freq = freq;
-    //     app->pwm_duty = duty;
+//     //     app->pwm_freq = freq;
+//     //     app->pwm_duty = duty;
 
-    //     if(app->pwm_ch != pwm_ch_id[channel_id]) { //-V1051
-    //         app->pwm_ch_prev = app->pwm_ch;
-    //         app->pwm_ch = pwm_ch_id[channel_id];
-    //         view_dispatcher_send_custom_event(app->view_dispatcher, SignalGenPwmEventChannelChange);
-    //     } else {
-    //         app->pwm_ch = pwm_ch_id[channel_id]; //-V1048
-    //         view_dispatcher_send_custom_event(app->view_dispatcher, SignalGenPwmEventUpdate);
-    //     }
-}
+//     //     if(app->pwm_ch != pwm_ch_id[channel_id]) { //-V1051
+//     //         app->pwm_ch_prev = app->pwm_ch;
+//     //         app->pwm_ch = pwm_ch_id[channel_id];
+//     //         view_dispatcher_send_custom_event(app->view_dispatcher, SignalGenPwmEventChannelChange);
+//     //     } else {
+//     //         app->pwm_ch = pwm_ch_id[channel_id]; //-V1048
+//     //         view_dispatcher_send_custom_event(app->view_dispatcher, SignalGenPwmEventUpdate);
+//     //     }
+// }
 
 void signal_gen_scene_pwm_on_enter(void* context) {
     SignalGenApp* app = context;
 
-    signal_gen_pwm_cpp_set_callback(app->pwm_view, signal_gen_pwm_callback, app);
+    // signal_gen_pwm_cpp_set_callback(app->pwm_view, signal_gen_pwm_callback, app);
 
     view_dispatcher_switch_to_view(app->view_dispatcher, SignalGenViewPwm);
 
