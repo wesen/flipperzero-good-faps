@@ -50,14 +50,6 @@ SignalGenApp* signal_gen_app_alloc() {
     view_dispatcher_add_view(
         app->view_dispatcher, SignalGenViewSubmenu, submenu_get_view(app->submenu));
 
-    // Original C version PWM view (commented out)
-    /*
-    app->pwm_view = signal_gen_pwm_alloc();
-    view_dispatcher_add_view(
-        app->view_dispatcher, SignalGenViewPwm, signal_gen_pwm_get_view(app->pwm_view));
-    */
-
-    // New C++ version PWM view
     app->pwm_view = signal_gen_pwm_cpp_alloc();
     view_dispatcher_add_view(
         app->view_dispatcher, SignalGenViewPwm, signal_gen_pwm_cpp_get_view(app->pwm_view));
@@ -77,11 +69,6 @@ void signal_gen_app_free(SignalGenApp* app) {
 
     submenu_free(app->submenu);
     variable_item_list_free(app->var_item_list);
-
-    // Original C version PWM cleanup (commented out)
-    /*
-    signal_gen_pwm_free(app->pwm_view);
-    */
 
     // New C++ version PWM cleanup
     signal_gen_pwm_cpp_free(app->pwm_view);

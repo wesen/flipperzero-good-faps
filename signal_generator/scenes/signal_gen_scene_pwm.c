@@ -9,9 +9,8 @@
 #define DEFAULT_DUTY 50
 
 // static void
-//     signal_gen_pwm_callback(uint8_t channel_id, uint32_t freq, uint8_t duty, void* context) {
-//     SignalGenApp* app = context;
-//     UNUSED(app);
+//     signal_gen_pwm_callback(uint8_t channel_id, uint32_t freq, uint8_t duty,
+//     void* context) { SignalGenApp* app = context; UNUSED(app);
 //     UNUSED(channel_id);
 //     UNUSED(freq);
 //     UNUSED(duty);
@@ -22,65 +21,69 @@
 //     //     if(app->pwm_ch != pwm_ch_id[channel_id]) { //-V1051
 //     //         app->pwm_ch_prev = app->pwm_ch;
 //     //         app->pwm_ch = pwm_ch_id[channel_id];
-//     //         view_dispatcher_send_custom_event(app->view_dispatcher, SignalGenPwmEventChannelChange);
+//     //         view_dispatcher_send_custom_event(app->view_dispatcher,
+//     SignalGenPwmEventChannelChange);
 //     //     } else {
 //     //         app->pwm_ch = pwm_ch_id[channel_id]; //-V1048
-//     //         view_dispatcher_send_custom_event(app->view_dispatcher, SignalGenPwmEventUpdate);
+//     //         view_dispatcher_send_custom_event(app->view_dispatcher,
+//     SignalGenPwmEventUpdate);
 //     //     }
 // }
 
-void signal_gen_scene_pwm_on_enter(void* context) {
-    SignalGenApp* app = context;
+void signal_gen_scene_pwm_on_enter(void *context) {
+  SignalGenApp *app = context;
 
-    // signal_gen_pwm_cpp_set_callback(app->pwm_view, signal_gen_pwm_callback, app);
+  // signal_gen_pwm_cpp_set_callback(app->pwm_view, signal_gen_pwm_callback,
+  // app);
 
-    view_dispatcher_switch_to_view(app->view_dispatcher, SignalGenViewPwm);
+  view_dispatcher_switch_to_view(app->view_dispatcher, SignalGenViewPwm);
 
-    // signal_gen_pwm_cpp_set_params(app->pwm_view, 0, DEFAULT_FREQ, DEFAULT_DUTY);
+  // signal_gen_pwm_cpp_set_params(app->pwm_view, 0, DEFAULT_FREQ,
+  // DEFAULT_DUTY);
 
-    // if(!furi_hal_pwm_is_running(pwm_ch_id[0])) {
-    //     furi_hal_pwm_start(pwm_ch_id[0], DEFAULT_FREQ, DEFAULT_DUTY);
-    // } else {
-    //     furi_hal_pwm_stop(pwm_ch_id[0]);
-    //     furi_hal_pwm_start(pwm_ch_id[0], DEFAULT_FREQ, DEFAULT_DUTY);
-    // }
+  // if(!furi_hal_pwm_is_running(pwm_ch_id[0])) {
+  //     furi_hal_pwm_start(pwm_ch_id[0], DEFAULT_FREQ, DEFAULT_DUTY);
+  // } else {
+  //     furi_hal_pwm_stop(pwm_ch_id[0]);
+  //     furi_hal_pwm_start(pwm_ch_id[0], DEFAULT_FREQ, DEFAULT_DUTY);
+  // }
 }
 
-bool signal_gen_scene_pwm_on_event(void* context, SceneManagerEvent event) {
-    SignalGenApp* app = context;
-    bool consumed = false;
+bool signal_gen_scene_pwm_on_event(void *context, SceneManagerEvent event) {
+  SignalGenApp *app = context;
+  bool consumed = false;
 
-    UNUSED(app);
-    UNUSED(event);
+  UNUSED(app);
+  UNUSED(event);
 
-    // if(event.type == SceneManagerEventTypeCustom) {
-    //     if(event.event == SignalGenPwmEventUpdate) {
-    //         consumed = true;
-    //         furi_hal_pwm_set_params(app->pwm_ch, app->pwm_freq, app->pwm_duty);
-    //     } else if(event.event == SignalGenPwmEventChannelChange) {
-    //         consumed = true;
-    //         // Stop previous channel PWM
-    //         if(furi_hal_pwm_is_running(app->pwm_ch_prev)) {
-    //             furi_hal_pwm_stop(app->pwm_ch_prev);
-    //         }
+  // if(event.type == SceneManagerEventTypeCustom) {
+  //     if(event.event == SignalGenPwmEventUpdate) {
+  //         consumed = true;
+  //         furi_hal_pwm_set_params(app->pwm_ch, app->pwm_freq, app->pwm_duty);
+  //     } else if(event.event == SignalGenPwmEventChannelChange) {
+  //         consumed = true;
+  //         // Stop previous channel PWM
+  //         if(furi_hal_pwm_is_running(app->pwm_ch_prev)) {
+  //             furi_hal_pwm_stop(app->pwm_ch_prev);
+  //         }
 
-    //         // Start PWM and restart if it was starter already
-    //         if(furi_hal_pwm_is_running(app->pwm_ch)) {
-    //             furi_hal_pwm_stop(app->pwm_ch);
-    //             furi_hal_pwm_start(app->pwm_ch, app->pwm_freq, app->pwm_duty);
-    //         } else {
-    //             furi_hal_pwm_start(app->pwm_ch, app->pwm_freq, app->pwm_duty);
-    //         }
-    //     }
-    // }
-    return consumed;
+  //         // Start PWM and restart if it was starter already
+  //         if(furi_hal_pwm_is_running(app->pwm_ch)) {
+  //             furi_hal_pwm_stop(app->pwm_ch);
+  //             furi_hal_pwm_start(app->pwm_ch, app->pwm_freq, app->pwm_duty);
+  //         } else {
+  //             furi_hal_pwm_start(app->pwm_ch, app->pwm_freq, app->pwm_duty);
+  //         }
+  //     }
+  // }
+  return consumed;
 }
 
-void signal_gen_scene_pwm_on_exit(void* context) {
-    SignalGenApp* app = context;
-    variable_item_list_reset(app->var_item_list);
+void signal_gen_scene_pwm_on_exit(void *context) {
+  SignalGenApp *app = context;
+  variable_item_list_reset(app->var_item_list);
 
-    if(furi_hal_pwm_is_running(app->pwm_ch)) {
-        furi_hal_pwm_stop(app->pwm_ch);
-    }
+  if (furi_hal_pwm_is_running(app->pwm_ch)) {
+    furi_hal_pwm_stop(app->pwm_ch);
+  }
 }
