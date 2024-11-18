@@ -29,7 +29,9 @@ public:
         canvas_draw_str_aligned(canvas, 6, y + 9, AlignLeft, AlignCenter, name_);
     }
 
-    bool handle_input(InputEvent*) override {
+    bool handle_input(InputEvent* event, View* view) override {
+        UNUSED(event);
+        UNUSED(view);
         return false;
     }
     void on_enter() override {
@@ -94,7 +96,8 @@ public:
         }
     }
 
-    bool handle_input(InputEvent* event) override {
+    bool handle_input(InputEvent* event, View* view) override {
+        UNUSED(view);
         if(event->type != InputTypeShort && event->type != InputTypeRepeat) {
             return false;
         }
@@ -110,15 +113,13 @@ public:
 
         bool value_changed = false;
         if(event->key == InputKeyRight) {
-            if(value_ + step_ <= max_) {
-                value_ += step_;
-                value_changed = true;
-            }
+            value_ += step_;
+            if(value_ > max_) value_ = max_;
+            value_changed = true;
         } else if(event->key == InputKeyLeft) {
-            if(value_ - step_ >= min_) {
-                value_ -= step_;
-                value_changed = true;
-            }
+            value_ -= step_;
+            if(value_ < min_) value_ = min_;
+            value_changed = true;
         }
 
         if(value_changed) {
@@ -213,7 +214,8 @@ public:
         }
     }
 
-    bool handle_input(InputEvent* event) override {
+    bool handle_input(InputEvent* event, View* view) override {
+        UNUSED(view);
         if(event->type != InputTypeShort && event->type != InputTypeRepeat) {
             return false;
         }

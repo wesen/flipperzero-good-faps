@@ -5,6 +5,7 @@
 #include <functional>
 #include <memory>
 #include <gui/canvas.h>
+#include <gui/view.h> // Added include for View
 
 namespace SignalGen {
 
@@ -20,7 +21,7 @@ public:
 
     // Core interface methods
     virtual void draw(Canvas* canvas, uint8_t y, bool selected) = 0;
-    virtual bool handle_input(InputEvent* event) = 0;
+    virtual bool handle_input(InputEvent* event, View* view) = 0; // Modified method
     virtual void on_enter() = 0;
     virtual void on_exit() = 0;
 

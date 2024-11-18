@@ -36,12 +36,12 @@ public:
   }
 
   // Handle input events
-  bool handle_input(InputEvent *event) {
+  bool handle_input(InputEvent *event, View* view) {
     if (items_count_ == 0)
       return false;
 
     // First let the selected item handle the input
-    if (items_[selected_index_]->handle_input(event)) {
+    if (items_[selected_index_]->handle_input(event, view)) {
       return true;
     }
 
